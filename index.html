@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html data-bs-theme="dark">
+
+<head style="width:100%">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fluxus Key bypasser</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+
+<body class="container text-center d-grid align-items-center vh-100 vw-100">
+  <div id="inputHWIDpart">
+    <h2>Fluxus key bypasser!</h2>
+    <p class="lead">Get your Fluxus key within seconds without Linkvertise.</p>
+    <div class="form-floating mb-3">
+      <input type="email" class="form-control" id="HWID" placeholder="">
+      <label for="HWID">Your HWID link</label>
+    </div>
+    <button class="btn btn-success mb-3" id="bypass">Bypass</button>
+
+    <br>
+    <hr><a class="text-white" href="#">We're opensource on Github!</a>
+  </div>
+  <div class="d-none" id="ongoingBypass">
+    <h2 id="bypassing">Bypassing...</h2>
+    <p id="keyresult">This shouldn't take too long. Please wait!</p>
+  </div>
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="toastAttention" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="me-auto">Attention</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">
+        Your HWID link is incorrect. Don't know how to get an HWID link?<br><br>
+        <h3>Getting your Fluxus key link</h3>
+        <ul>
+          <li>Open Roblox and wait until Fluxus opens.</li>
+          <li>Press "Get Key", if prompted. This will copy your link to your clipboard.</li>
+          <li>Paste your link into the input above and click "Bypass".</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+  <script type="module">
+    const requester = new XMLHttpRequest();
+    const inputHWIDpart = document.getElementById('inputHWIDpart');
+    const ongoingBypass = document.getElementById('ongoingBypass');
+    const inputHWID = document.getElementById('HWID');
+    const bypass = document.getElementById('bypass');
+    const bypassinghint = document.getElementById('bypassing')
+    const keyresult = document.getElementById("keyresult")
+
+    function extractHWIDFromURL(url) {
+      const match = url.match(/HWID=([\w\d]+)/);
+      return match ? match[0x1] : null;
+    }
+
+    function request(url, headers) {
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+
+        if (headers) {
+          for (const [key, value] of Object.entries(headers)) {
+            xhr.setRequestHeader(key, value);
+          }
+        }
+
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+              bypassinghint.innerHTML = "Bypassing success!"
+              keyresult.innerHTML = xhr.responseText
+              resolve({ data: xhr.responseText });
+            } else {
+              reject(new Error(`Request failed with status ${xhr.status}`));
+            }
+          }
+        };
+
+        xhr.onerror = function() {
+          reject(new Error('Network error occurred'));
+        };
+
+        xhr.onabort = function() {
+          reject(new Error('Request aborted'));
+        };
+
+        xhr.send();
+      });
+    }
+
+
+    function wait(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function getkey() {
+      const extractedHWID = extractHWIDFromURL(inputHWID.value);
+      console.log(extractedHWID)
+      if (extractedHWID) {
+        inputHWIDpart.classList.add('d-none');
+        ongoingBypass.classList.remove('d-none');
+        const bypassUrl = 'https://fluxus-bypasser-api.joystick101.repl.co/bypass?hwid=' + extractedHWID;
+        const headers = {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36',
+        };
+        console.log("Initializing")
+        request(bypassUrl)
+        } else {
+          const toastAttention = document.getElementById('toastAttention');
+          const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastAttention);
+          toastBootstrap.show();
+        }
+      
+    }
+
+    bypass.addEventListener('click', getkey);
+  </script>
+</body>
+
+</html>
