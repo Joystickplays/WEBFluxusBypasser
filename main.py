@@ -31,12 +31,9 @@ def bypass():
 		    time.sleep(0x1)
 		    print("First check")
 		    requests.get('https://fluxteam.net/android/checkpoint/check1.php', headers=headers)
-		    print("Second check")
-		    requests.get('https://fluxteam.net/android/checkpoint/check2.php', headers=headers)
-		    print("Third check")
-		    requests.get('https://fluxteam.net/android/checkpoint/check3.php', headers=headers)
 		    time.sleep(0x1)
 		    response = requests.get('https://fluxteam.net/android/checkpoint/main.php', headers=headers)
+		    
 		    print('Getting key...')
 		    parser = bs(response.text, 'html.parser')
 		    print(parser.find("code").get_text())
@@ -47,4 +44,3 @@ def bypass():
 if __name__ == '__main__':
 	http_server = WSGIServer(('0.0.0.0', 8080), app)
 	http_server.serve_forever()
-  
