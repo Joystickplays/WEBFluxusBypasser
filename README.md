@@ -1,6 +1,6 @@
 # WEBFluxusBypasser
 
-!! This project is protected by the MIT license. Read LICENSE file. TL;DR: You're not allowed to pass this off as your own. !!
+!! This project is protected by the MIT license. Read LICENSE file. !!
 
 Just bypasses the Fluxus Key system. Input your link and it'll spit out a string of characters you can use for your Fluxus Key.
 Access it on [here!](https://fluxbypass.goteamstudios.xyz)
